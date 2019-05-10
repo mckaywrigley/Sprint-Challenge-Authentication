@@ -14,19 +14,14 @@ function App() {
         <Link to="/register">Register</Link>
         <Link to="/login">Login</Link>
         <Link to="/jokes">Jokes</Link>
-        <button onClick={this.logout}>Logout</button>
+        <button>Logout</button>
         <Route
           exact
           path="/register"
           render={props => <Register {...props} />}
         />
         <Route exact path="/login" render={props => <Login {...props} />} />
-        <Route
-          exact
-          path="/jokes"
-          component={Users}
-          render={props => <Jokes {...props} />}
-        />
+        <Route exact path="/jokes" render={props => <Jokes {...props} />} />
       </BrowserRouter>
     </div>
   );
