@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
-class Signup extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -83,4 +83,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default Login;
