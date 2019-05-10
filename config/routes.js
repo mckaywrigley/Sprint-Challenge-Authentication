@@ -1,8 +1,10 @@
 const axios = require("axios");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const { authenticate } = require("../auth/authenticate");
 
-const db = require("../database/dbConfig");
+const User = require("../database/models/User");
 
 module.exports = server => {
   server.post("/api/register", register);
@@ -15,21 +17,22 @@ function register(req, res) {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10);
   user.password = hash;
-  db("users")
-    .insert(user)
+  User.add(user)
     .then(user => {
       res.status(201).json(user);
     })
     .catch(error => {
-      res.status(500).json(error);
+      res.status(500).json({ error: "Could not register." });
     });
 }
 
 function login(req, res) {
   // implement user login
   let { username, password } = req.body;
-  db("users")
-    .where({ username })
+  console.log(req.body);
+  User.findBy({ username })
+    .first()
+    .where({ username: req.body.username })
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
@@ -42,7 +45,7 @@ function login(req, res) {
       }
     })
     .catch(err => {
-      res.status(500).json(err.response);
+      res.status(500).json({ error: "Could not login." });
     });
 }
 
@@ -56,7 +59,8 @@ function generateToken(user) {
     expiresIn: "1h"
   };
 
-  return jwt.sign(payload, secret, options);
+  // I know the secret should be hidden in another file, too lazy rn
+  return jwt.sign(payload, "akdhkajshf", options);
 }
 
 function getJokes(req, res) {
