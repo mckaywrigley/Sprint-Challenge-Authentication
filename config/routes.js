@@ -60,7 +60,7 @@ function generateToken(user) {
   };
 
   // I know the secret should be hidden in another file, too lazy rn
-  return jwt.sign(payload, "akdhkajshf", options);
+  return jwt.sign(payload, process.env.JWT_SECRET, options);
 }
 
 function getJokes(req, res) {
